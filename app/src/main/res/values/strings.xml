@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">EasySearch</string>
+    <string name="edittext_hint">Start typing username...</string>
 </resources>
