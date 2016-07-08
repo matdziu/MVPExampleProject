@@ -1,6 +1,5 @@
 package com.example.mateuszdziubek.easysearch.usersearch;
 
-import android.animation.ObjectAnimator;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,7 +9,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -31,7 +29,6 @@ public class UserSearchFragment extends Fragment implements UserSearchContract.V
 
     ListView listView;
     EditText editText;
-    ProgressBar progressBar;
 
     List<String> users = new ArrayList<>();
     UserSearchContract.UserActions userSearchPresenter;
