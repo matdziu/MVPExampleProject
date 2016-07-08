@@ -8,12 +8,12 @@ import java.util.List;
 public interface UserSearchContract {
 
     interface View {
-        void showPopulatedList(List<String> users);
+        void showPopulatedList(List<String> users, ListView listView);
         void applyDynamicSearch(EditText editText, ListView listView);
     }
 
     interface UserActions {
         void startApplication();
-        void searchForUser(EditText editText);
+        void searchForUser(String user);
     }
 }

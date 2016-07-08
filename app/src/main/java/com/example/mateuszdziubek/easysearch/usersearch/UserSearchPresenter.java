@@ -3,28 +3,31 @@ package com.example.mateuszdziubek.easysearch.usersearch;
 import android.widget.EditText;
 import android.widget.ListView;
 
+
 import java.util.List;
 
 public class UserSearchPresenter implements UserSearchContract.UserActions {
 
     UserSearchContract.View userSearchView;
-    List users;
+    List<String> users;
     ListView listView;
+    EditText editText;
 
     public UserSearchPresenter(UserSearchContract.View userSearchView, List users,
-                               ListView listView) {
+                               ListView listView, EditText editText) {
         this.userSearchView = userSearchView;
         this.users = users;
         this.listView = listView;
-    }
-
-    @Override
-    public void searchForUser(EditText editText) {
-        userSearchView.applyDynamicSearch(editText, listView);
+        this.editText = editText;
     }
 
     @Override
     public void startApplication() {
-        userSearchView.showPopulatedList(users);
+        userSearchView.showPopulatedList(users, listView);
+    }
+
+    @Override
+    public void searchForUser(String user) {
+        editText.setText(user);
     }
 }
