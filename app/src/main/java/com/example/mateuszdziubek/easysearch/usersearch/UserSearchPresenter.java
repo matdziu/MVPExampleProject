@@ -29,5 +29,6 @@ public class UserSearchPresenter implements UserSearchContract.UserActions {
     @Override
     public void searchForUser(String user) {
         editText.setText(user);
+
     }
 }
