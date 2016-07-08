@@ -1,34 +1,56 @@
 package com.example.mateuszdziubek.easysearch.usersearch;
 
-import android.widget.EditText;
-import android.widget.ListView;
 
+import android.util.Log;
+
+import com.example.mateuszdziubek.easysearch.usersearch.model.UserModel;
+import com.example.mateuszdziubek.easysearch.usersearch.restdownload.GitUsersListProvider;
 
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class UserSearchPresenter implements UserSearchContract.UserActions {
 
-    UserSearchContract.View userSearchView;
-    List<String> users;
-    ListView listView;
-    EditText editText;
+    private UserSearchContract.View userSearchView;
+    private List<String> users;
 
-    public UserSearchPresenter(UserSearchContract.View userSearchView, List users,
-                               ListView listView, EditText editText) {
+    public UserSearchPresenter(UserSearchContract.View userSearchView, List users) {
         this.userSearchView = userSearchView;
         this.users = users;
-        this.listView = listView;
-        this.editText = editText;
     }
 
     @Override
-    public void startApplication() {
-        userSearchView.showPopulatedList(users, listView);
+    public void loadData() {
+        GitUsersListProvider gitUsersListProvider = new GitUsersListProvider();
+        Callback<List<UserModel>> callback = new Callback<List<UserModel>>() {
+            @Override
+            public void onResponse(Call<List<UserModel>> call, Response<List<UserModel>> response) {
+                Log.d("usersDownload", "success!");
+
+                for(UserModel userModel : response.body()) {
+                    users.add(userModel.getLogin());
+                }
+
+                userSearchView.showPopulatedList(users);
+
+            }
+
+            @Override
+            public void onFailure(Call<List<UserModel>> call, Throwable t) {
+                Log.d("usersDownload", "failure!");
+            }
+        };
+
+        gitUsersListProvider.downloadUsers(callback);
     }
 
     @Override
     public void searchForUser(String user) {
-        editText.setText(user);
+        userSearchView.fillEditText(user);
 
     }
+
 }

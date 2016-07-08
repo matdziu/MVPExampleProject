@@ -1,19 +1,16 @@
 package com.example.mateuszdziubek.easysearch.usersearch;
 
-import android.widget.EditText;
-import android.widget.ListView;
-
 import java.util.List;
 
 public interface UserSearchContract {
 
     interface View {
-        void showPopulatedList(List<String> users, ListView listView);
-        void applyDynamicSearch(EditText editText, ListView listView);
+        void showPopulatedList(List<String> users);
+        void fillEditText(String text);
     }
 
     interface UserActions {
-        void startApplication();
+        void loadData();
         void searchForUser(String user);
     }
 }

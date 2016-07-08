@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,23 +13,18 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.example.mateuszdziubek.easysearch.R;
-import com.example.mateuszdziubek.easysearch.usersearch.model.UserModel;
-import com.example.mateuszdziubek.easysearch.usersearch.restdownload.GitUsersListProvider;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class UserSearchFragment extends Fragment implements UserSearchContract.View {
 
-    ListView listView;
-    EditText editText;
+    private ListView listView;
+    private EditText editText;
 
-    List<String> users = new ArrayList<>();
-    UserSearchContract.UserActions userSearchPresenter;
+    private List<String> users = new ArrayList<>();
+    private UserSearchContract.UserActions userSearchPresenter;
 
     @Nullable
     @Override
@@ -39,42 +33,26 @@ public class UserSearchFragment extends Fragment implements UserSearchContract.V
 
         listView = (ListView) root.findViewById(R.id.listView);
         editText = (EditText) root.findViewById(R.id.editText);
-        userSearchPresenter = new UserSearchPresenter(this, users, listView, editText);
+        userSearchPresenter = new UserSearchPresenter(this, users);
 
-        userSearchPresenter.startApplication();
+        userSearchPresenter.loadData();
 
         return root;
     }
 
     @Override
-    public void showPopulatedList(final List<String> users, final ListView listView) {
-        GitUsersListProvider gitUsersListProvider = new GitUsersListProvider();
-        Callback<List<UserModel>> callback = new Callback<List<UserModel>>() {
-            @Override
-            public void onResponse(Call<List<UserModel>> call, Response<List<UserModel>> response) {
-                Log.d("usersDownload", "success!");
-
-                for(UserModel userModel : response.body()) {
-                    users.add(userModel.getLogin());
-                }
-
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, users);
-                listView.setAdapter(adapter);
-                applyDynamicSearch(editText, listView);
-
-            }
-
-            @Override
-            public void onFailure(Call<List<UserModel>> call, Throwable t) {
-                Log.d("usersDownload", "failure!");
-            }
-        };
-
-        gitUsersListProvider.downloadUsers(callback);
+    public void showPopulatedList(final List<String> users) {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, users);
+        listView.setAdapter(adapter);
+        applyDynamicSearch(editText, listView);
 
     }
 
     @Override
+    public void fillEditText(String text) {
+        editText.setText(text);
+    }
+
     public void applyDynamicSearch(EditText editText, ListView listView) {
         final ArrayAdapter<String> adapter = (ArrayAdapter<String>) listView.getAdapter();
         editText.addTextChangedListener(new TextWatcher() {
@@ -95,4 +73,5 @@ public class UserSearchFragment extends Fragment implements UserSearchContract.V
             }
         });
     }
+
 }
