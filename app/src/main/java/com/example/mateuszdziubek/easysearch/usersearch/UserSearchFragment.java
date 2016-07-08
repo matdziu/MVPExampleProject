@@ -89,6 +89,7 @@ public class UserSearchFragment extends Fragment implements UserSearchContract.V
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if(charSequence.length() >= 3)
                     adapter.getFilter().filter(charSequence);
             }
 
