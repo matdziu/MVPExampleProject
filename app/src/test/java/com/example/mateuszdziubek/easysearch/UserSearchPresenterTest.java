@@ -12,6 +12,7 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -33,7 +34,15 @@ public class UserSearchPresenterTest {
     @Mock
     UserModel userModel;
 
+    @Mock
+    UserModel userModel1;
+
+    @Mock
+    UserModel userModel2;
+
     private UserSearchPresenter userSearchPresenter;
+
+    private List<UserModel> emptyUserModelList = new ArrayList<>();
 
     @Before
     public void setUp() {
@@ -50,7 +59,7 @@ public class UserSearchPresenterTest {
     }
 
     @Test
-    public void isDataFetchedProperly() {
+    public void isSingleUserFetchedProperly() {
         when(userModel.getLogin()).thenReturn("test");
 
         userSearchPresenter.loadData();
@@ -58,6 +67,28 @@ public class UserSearchPresenterTest {
 
         repositoryCallbackCaptor.getValue().onResult(Arrays.asList(userModel));
         verify(userSearchView).showPopulatedList(Arrays.asList("test"));
+    }
+
+    @Test
+    public void areMultipleUsersFetchedProperly() {
+        when(userModel.getLogin()).thenReturn("test");
+        when(userModel1.getLogin()).thenReturn("test1");
+        when(userModel2.getLogin()).thenReturn("test2");
+
+        userSearchPresenter.loadData();
+        verify(usersRepository).getUsers(repositoryCallbackCaptor.capture());
+
+        repositoryCallbackCaptor.getValue().onResult(Arrays.asList(userModel, userModel1, userModel2));
+        verify(userSearchView).showPopulatedList(Arrays.asList("test", "test1", "test2"));
+    }
+
+    @Test
+    public void isNoUsersResultingInError() {
+        userSearchPresenter.loadData();
+        verify(usersRepository).getUsers(repositoryCallbackCaptor.capture());
+
+        repositoryCallbackCaptor.getValue().onResult(emptyUserModelList);
+        verify(userSearchPresenter).throwException();
     }
 
 

@@ -1,6 +1,8 @@
 package com.example.mateuszdziubek.easysearch.usersearch;
 
 
+import android.widget.Toast;
+
 import com.example.mateuszdziubek.easysearch.usersearch.model.RepositoryCallback;
 import com.example.mateuszdziubek.easysearch.usersearch.model.UserModel;
 import com.example.mateuszdziubek.easysearch.usersearch.model.UsersCallback;
@@ -29,11 +31,16 @@ public class UserSearchPresenter implements UserSearchContract.UserActions {
             @Override
             public void onResult(List<UserModel> result) {
 
-                for(UserModel userModel : result) {
-                    users.add(userModel.getLogin());
-                }
+                if (result.size() > 0) {
+                    for(UserModel userModel : result) {
+                        users.add(userModel.getLogin());
+                    }
 
-                userSearchView.showPopulatedList(users);
+                    userSearchView.showPopulatedList(users);
+                }
+                else {
+                    throwException();
+                }
             }
 
             @Override
@@ -50,6 +57,10 @@ public class UserSearchPresenter implements UserSearchContract.UserActions {
     public void searchForUser(String user) {
         userSearchView.fillEditText(user);
 
+    }
+
+    public void throwException() {
+        throw new NullPointerException("no data in results");
     }
 
 }
