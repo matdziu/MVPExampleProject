@@ -9,8 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.mateuszdziubek.easysearch.R;
 
@@ -24,9 +26,12 @@ public class UserSearchFragment extends Fragment implements UserSearchContract.V
 
     private EditText editText;
 
+    private Button loadUsersButton;
+
     private List<String> users = new ArrayList<>();
 
     private UserSearchContract.UserActions userSearchPresenter;
+    private boolean isClicked = false;
 
     @Nullable
     @Override
@@ -35,9 +40,21 @@ public class UserSearchFragment extends Fragment implements UserSearchContract.V
 
         listView = (ListView) root.findViewById(R.id.listView);
         editText = (EditText) root.findViewById(R.id.editText);
+        loadUsersButton = (Button) root.findViewById(R.id.loadUsersButton);
         userSearchPresenter = new UserSearchPresenter(this, users);
 
-        userSearchPresenter.loadData();
+        loadUsersButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!isClicked) {
+                    userSearchPresenter.loadData();
+                    isClicked = true;
+                }
+                else {
+                    Toast.makeText(getContext(), "Users already loaded", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         return root;
     }
