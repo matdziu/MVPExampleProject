@@ -1,6 +1,7 @@
 package com.example.mateuszdziubek.easysearch.usersearch;
 
 
+import com.example.mateuszdziubek.easysearch.usersearch.model.RepositoryCallback;
 import com.example.mateuszdziubek.easysearch.usersearch.model.UserModel;
 import com.example.mateuszdziubek.easysearch.usersearch.model.UsersCallback;
 
@@ -20,7 +21,7 @@ public class UserSearchPresenter implements UserSearchContract.UserActions {
 
     @Override
     public void loadData() {
-        UsersCallback usersCallback = new UsersCallback() {
+        RepositoryCallback usersCallback = new UsersCallback() {
             @Override
             public void onResult(List<UserModel> result) {
 
@@ -37,7 +38,7 @@ public class UserSearchPresenter implements UserSearchContract.UserActions {
             }
         };
 
-        UsersRepository usersRepository = new UsersRepository();
+        UserSearchContract.Repository usersRepository = new UsersRepository();
         usersRepository.getUsers(usersCallback);
 
     }

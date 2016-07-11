@@ -1,6 +1,7 @@
 package com.example.mateuszdziubek.easysearch.usersearch;
 
-import com.example.mateuszdziubek.easysearch.usersearch.model.UsersCallback;
+import com.example.mateuszdziubek.easysearch.usersearch.model.RepositoryCallback;
+import com.example.mateuszdziubek.easysearch.usersearch.model.UserModel;
 
 import java.util.List;
 
@@ -21,9 +22,9 @@ public interface UserSearchContract {
         void searchForUser(String user);
     }
 
-    interface IRepository {
+    interface Repository {
 
-        void getUsers(UsersCallback usersCallback);
+        void getUsers(RepositoryCallback<List<UserModel>> usersCallback);
 
     }
 }

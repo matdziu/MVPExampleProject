@@ -8,8 +8,6 @@ import com.example.mateuszdziubek.easysearch.usersearch.restdownload.GitUsersLis
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -55,12 +53,12 @@ public class UserSearchPresenterTest {
         verify(userSearchView).fillEditText(user);
     }
 
-    @Test
-    public void isDataLoadedProperly() {
-        userSearchPresenter.loadData();
-        verify(usersRepository).getUsers(callback);
-
-    }
+//    @Test
+//    public void isDataLoadedProperly() {
+//        userSearchPresenter.loadData();
+//        verify(usersRepository).getUsers(callback);
+//
+//    }
 
 
 }
