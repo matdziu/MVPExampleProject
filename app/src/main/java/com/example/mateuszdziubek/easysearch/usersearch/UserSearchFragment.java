@@ -31,6 +31,8 @@ public class UserSearchFragment extends Fragment implements UserSearchContract.V
 
     private UserSearchContract.UserActions userSearchPresenter;
 
+    private UserSearchContract.Repository userSearchRepository;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -39,7 +41,9 @@ public class UserSearchFragment extends Fragment implements UserSearchContract.V
         listView = (ListView) root.findViewById(R.id.listView);
         editText = (EditText) root.findViewById(R.id.editText);
         loadUsersButton = (Button) root.findViewById(R.id.loadUsersButton);
-        userSearchPresenter = new UserSearchPresenter(this, users);
+        userSearchRepository = new UsersRepository();
+
+        userSearchPresenter = new UserSearchPresenter(this, userSearchRepository);
 
         loadUsersButton.setOnClickListener(new View.OnClickListener() {
             @Override
