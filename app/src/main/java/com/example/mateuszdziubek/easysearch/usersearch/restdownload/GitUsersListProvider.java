@@ -2,6 +2,7 @@ package com.example.mateuszdziubek.easysearch.usersearch.restdownload;
 
 import com.example.mateuszdziubek.easysearch.usersearch.model.UserModel;
 
+import java.io.IOException;
 import java.util.List;
 
 import retrofit2.Call;
@@ -22,8 +23,13 @@ public class GitUsersListProvider {
 
     public void downloadUsers(Callback<List<UserModel>> callback) {
         Call<List<UserModel>> call = service.getUsers();
-        call.enqueue(callback);
+//        call.enqueue(callback);
 
+        try {
+            callback.onResponse(call, call.execute());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

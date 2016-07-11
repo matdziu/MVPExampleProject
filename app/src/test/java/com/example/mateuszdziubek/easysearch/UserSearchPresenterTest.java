@@ -2,6 +2,7 @@ package com.example.mateuszdziubek.easysearch;
 
 import com.example.mateuszdziubek.easysearch.usersearch.UserSearchContract;
 import com.example.mateuszdziubek.easysearch.usersearch.UserSearchPresenter;
+import com.example.mateuszdziubek.easysearch.usersearch.UsersRepository;
 import com.example.mateuszdziubek.easysearch.usersearch.model.UserModel;
 import com.example.mateuszdziubek.easysearch.usersearch.restdownload.GitUsersListProvider;
 
@@ -36,6 +37,9 @@ public class UserSearchPresenterTest {
     @Mock
     private Callback<List<UserModel>> callback;
 
+    @Mock
+    private UsersRepository usersRepository;
+
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
@@ -54,7 +58,7 @@ public class UserSearchPresenterTest {
     @Test
     public void isDataLoadedProperly() {
         userSearchPresenter.loadData();
-        verify(userSearchView).showPopulatedList(users);
+        verify(usersRepository).getUsers(callback);
 
     }
 
