@@ -1,8 +1,5 @@
 package com.example.mateuszdziubek.easysearch.usersearch;
 
-
-import android.widget.Toast;
-
 import com.example.mateuszdziubek.easysearch.usersearch.model.RepositoryCallback;
 import com.example.mateuszdziubek.easysearch.usersearch.model.UserModel;
 import com.example.mateuszdziubek.easysearch.usersearch.model.UsersCallback;
