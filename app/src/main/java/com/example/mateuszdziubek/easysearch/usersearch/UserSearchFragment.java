@@ -21,9 +21,11 @@ import java.util.List;
 public class UserSearchFragment extends Fragment implements UserSearchContract.View {
 
     private ListView listView;
+
     private EditText editText;
 
     private List<String> users = new ArrayList<>();
+
     private UserSearchContract.UserActions userSearchPresenter;
 
     @Nullable
