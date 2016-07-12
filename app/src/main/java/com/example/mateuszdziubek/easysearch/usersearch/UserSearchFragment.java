@@ -17,6 +17,8 @@ import com.example.mateuszdziubek.easysearch.R;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 
 public class UserSearchFragment extends Fragment implements UserSearchContract.View {
 
@@ -26,7 +28,8 @@ public class UserSearchFragment extends Fragment implements UserSearchContract.V
 
     private Button loadUsersButton;
 
-    private UserSearchContract.UserActions userSearchPresenter;
+    @Inject
+    UserSearchContract.UserActions userSearchPresenter;
 
 
     @Nullable
@@ -38,8 +41,7 @@ public class UserSearchFragment extends Fragment implements UserSearchContract.V
         editText = (EditText) root.findViewById(R.id.editText);
         loadUsersButton = (Button) root.findViewById(R.id.loadUsersButton);
 
-        DependencyProvider dependencyProvider = new DependencyProvider(this);
-        userSearchPresenter = dependencyProvider.provideUserSearchPresenter();
+
 
         loadUsersButton.setOnClickListener(new View.OnClickListener() {
             @Override

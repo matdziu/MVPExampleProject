@@ -25,15 +25,11 @@ dependencies {
     testCompile 'org.mockito:mockito-all:2.0.2-beta'
     testCompile 'com.android.support:appcompat-v7:24.0.0'
 
-    androidTestCompile 'junit:junit:4.12'
-    androidTestCompile 'org.mockito:mockito-all:2.0.2-beta'
-    //androidTestCompile 'com.elpassion.android.commons:espresso:0.0.9'
-    //androidTestCompile 'com.android.support:appcompat-v7:24.0.0'
-
     compile 'com.android.support:appcompat-v7:24.0.0'
     compile 'com.google.code.gson:gson:2.6.2'
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+    compile 'com.google.dagger:dagger-compiler:2.5'
 
 
 }
