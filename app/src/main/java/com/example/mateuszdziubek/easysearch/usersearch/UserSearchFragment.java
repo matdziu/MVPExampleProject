@@ -42,6 +42,10 @@ public class UserSearchFragment extends Fragment implements UserSearchContract.V
         loadUsersButton = (Button) root.findViewById(R.id.loadUsersButton);
 
 
+        UserSearchComponent userSearchComponent = DaggerUserSearchComponent.builder()
+                .userSearchModule(new UserSearchModule(this)).build();
+
+        userSearchComponent.inject(this);
 
         loadUsersButton.setOnClickListener(new View.OnClickListener() {
             @Override

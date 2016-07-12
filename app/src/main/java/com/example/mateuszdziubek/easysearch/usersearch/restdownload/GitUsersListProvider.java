@@ -23,13 +23,13 @@ public class GitUsersListProvider {
 
     public void downloadUsers(Callback<List<UserModel>> callback) {
         Call<List<UserModel>> call = service.getUsers();
-//        call.enqueue(callback);
+        call.enqueue(callback);
 
-        try {
-            callback.onResponse(call, call.execute());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            callback.onResponse(call, call.execute());
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
 }
