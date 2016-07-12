@@ -15,7 +15,6 @@ import android.widget.ListView;
 
 import com.example.mateuszdziubek.easysearch.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -27,11 +26,8 @@ public class UserSearchFragment extends Fragment implements UserSearchContract.V
 
     private Button loadUsersButton;
 
-    private List<String> users = new ArrayList<>();
-
     private UserSearchContract.UserActions userSearchPresenter;
 
-    private UserSearchContract.Repository userSearchRepository;
 
     @Nullable
     @Override
@@ -41,9 +37,9 @@ public class UserSearchFragment extends Fragment implements UserSearchContract.V
         listView = (ListView) root.findViewById(R.id.listView);
         editText = (EditText) root.findViewById(R.id.editText);
         loadUsersButton = (Button) root.findViewById(R.id.loadUsersButton);
-        userSearchRepository = new UsersRepository();
 
-        userSearchPresenter = new UserSearchPresenter(this, userSearchRepository);
+        DependencyProvider dependencyProvider = new DependencyProvider(this);
+        userSearchPresenter = dependencyProvider.provideUserSearchPresenter();
 
         loadUsersButton.setOnClickListener(new View.OnClickListener() {
             @Override

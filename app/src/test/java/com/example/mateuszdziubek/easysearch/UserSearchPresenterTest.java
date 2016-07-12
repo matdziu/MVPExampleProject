@@ -82,14 +82,12 @@ public class UserSearchPresenterTest {
         verify(userSearchView).showPopulatedList(Arrays.asList("test", "test1", "test2"));
     }
 
-    @Test(expected=NullPointerException.class)
+    @Test(expected = NullPointerException.class)
     public void isNoUsersResultingInError() {
         userSearchPresenter.loadData();
         verify(usersRepository).getUsers(repositoryCallbackCaptor.capture());
 
         repositoryCallbackCaptor.getValue().onResult(emptyUserModelList);
-        verify(userSearchPresenter).throwException();
     }
-
 
 }

@@ -36,7 +36,7 @@ public class UserSearchPresenter implements UserSearchContract.UserActions {
                     userSearchView.showPopulatedList(users);
                 }
                 else {
-                    throwException();
+                    throw new NullPointerException("no data in results");
                 }
             }
 
@@ -54,10 +54,6 @@ public class UserSearchPresenter implements UserSearchContract.UserActions {
     public void searchForUser(String user) {
         userSearchView.fillEditText(user);
 
-    }
-
-    public void throwException() {
-        throw new NullPointerException("no data in results");
     }
 
 }
