@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
@@ -26,8 +25,6 @@ public class UserSearchFragment extends Fragment implements UserSearchContract.V
 
     private EditText editText;
 
-    private Button loadUsersButton;
-
     @Inject
     UserSearchContract.UserActions userSearchPresenter;
 
@@ -39,21 +36,13 @@ public class UserSearchFragment extends Fragment implements UserSearchContract.V
 
         listView = (ListView) root.findViewById(R.id.listView);
         editText = (EditText) root.findViewById(R.id.editText);
-        loadUsersButton = (Button) root.findViewById(R.id.loadUsersButton);
-
 
         UserSearchComponent userSearchComponent = DaggerUserSearchComponent.builder()
                 .userSearchModule(new UserSearchModule(this)).build();
 
         userSearchComponent.inject(this);
 
-        loadUsersButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                userSearchPresenter.loadData();
-                loadUsersButton.setVisibility(View.GONE);
-            }
-        });
+        userSearchPresenter.loadData();
 
         return root;
     }
@@ -81,8 +70,7 @@ public class UserSearchFragment extends Fragment implements UserSearchContract.V
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if(charSequence.length() >= 3)
-                    adapter.getFilter().filter(charSequence);
+                adapter.getFilter().filter(charSequence);
             }
 
             @Override
