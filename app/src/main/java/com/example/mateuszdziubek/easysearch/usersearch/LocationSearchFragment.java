@@ -31,6 +31,7 @@ public class LocationSearchFragment extends Fragment implements LocationSearchCo
 
     private boolean enableNewApiCall = false;
 
+
     @Inject
     LocationSearchContract.UserActions locationSearchPresenter;
 
