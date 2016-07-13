@@ -28,6 +28,10 @@ public class LocationSearchPresenter implements LocationSearchContract.UserActio
         RepositoryCallback locationCallback = new LocationsCallback() {
             @Override
             public void onResult(LocationModel result) {
+                if(locationSearchView.clearCache()) {
+                    locations.clear();
+                    locationSearchView.lockCacheClear();
+                }
 
                 if (locations.size() == 0) {
                     if (result.getItems().length > 0) {

@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,6 +66,16 @@ public class LocationSearchFragment extends Fragment implements LocationSearchCo
 
     }
 
+    @Override
+    public boolean clearCache() {
+        return enableNewApiCall;
+    }
+
+    @Override
+    public void lockCacheClear() {
+        enableNewApiCall = false;
+    }
+
     public void applyDynamicSearch() {
         editText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -90,7 +99,6 @@ public class LocationSearchFragment extends Fragment implements LocationSearchCo
                     if (!previousQuery.equals(editable.toString())) {
                         enableNewApiCall = true;
                         locationSearchPresenter.search(editable.toString());
-                        Log.d("charSequence", "download using " + editable.toString());
                     }
                 }
 
@@ -98,7 +106,6 @@ public class LocationSearchFragment extends Fragment implements LocationSearchCo
 
 
         });
-
 
     }
 

@@ -14,6 +14,10 @@ public interface LocationSearchContract {
 
         void applyFilter(String query);
 
+        boolean clearCache();
+
+        void lockCacheClear();
+
     }
 
     interface UserActions {
