@@ -1,18 +1,15 @@
 package com.example.mateuszdziubek.easysearch.usersearch.restdownload;
 
-import com.example.mateuszdziubek.easysearch.usersearch.model.UserModel;
-
-import java.io.IOException;
-import java.util.List;
+import com.example.mateuszdziubek.easysearch.usersearch.model.LocationModel;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class GitUsersListProvider {
+public class LocationListProvider {
 
-    final String BASE_URL = "https://api.github.com";
+    final String BASE_URL = "http://api.stage.klart.se";
 
     Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(BASE_URL)
@@ -21,8 +18,8 @@ public class GitUsersListProvider {
 
     RestAPI service = retrofit.create(RestAPI.class);
 
-    public void downloadUsers(Callback<List<UserModel>> callback) {
-        Call<List<UserModel>> call = service.getUsers();
+    public void downloadLocations(Callback<LocationModel> callback, String query) {
+        Call<LocationModel> call = service.getLocations(query);
         call.enqueue(callback);
 
 //        try {

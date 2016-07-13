@@ -5,12 +5,12 @@ import android.os.Bundle;
 
 import com.example.mateuszdziubek.easysearch.R;
 
-public class UserSearchActivity extends AppCompatActivity {
+public class LocationSearchActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_search);
+        setContentView(R.layout.activity_location_search);
 
     }
 }
