@@ -12,7 +12,8 @@ public interface LocationSearchContract {
 
         void showPopulatedList(List<String> locations);
 
-        void applyFilters(String query);
+        void applyFilter(String query);
+
     }
 
     interface UserActions {

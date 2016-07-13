@@ -18,7 +18,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 
-public class UserSearchPresenterTest {
+public class LocationSearchPresenterTest {
 
     @Mock
     private LocationSearchContract.View locationSearchView;

@@ -29,16 +29,20 @@ public class LocationSearchPresenter implements LocationSearchContract.UserActio
             @Override
             public void onResult(LocationModel result) {
 
-                if (result.getItems().length > 0) {
-                    for(Items item : result.getItems()) {
-                        locations.add(item.getName());
-                    }
+                if (locations.size() == 0) {
+                    if (result.getItems().length > 0) {
+                        for(Items item : result.getItems()) {
+                            locations.add(item.getName());
+                        }
 
-                    locationSearchView.showPopulatedList(locations);
-                    locationSearchView.applyFilters(query);
+                        locationSearchView.showPopulatedList(locations);
+                    }
+                    else {
+                        throw new NullPointerException("no data in results");
+                    }
                 }
                 else {
-                    throw new NullPointerException("no data in results");
+                    locationSearchView.applyFilter(query);
                 }
             }
 

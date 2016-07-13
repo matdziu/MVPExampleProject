@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,10 @@ public class LocationSearchFragment extends Fragment implements LocationSearchCo
     private EditText editText;
 
     private ArrayAdapter<String> adapter;
+
+    private String previousQuery = "";
+
+    private boolean enableNewApiCall = false;
 
     @Inject
     LocationSearchContract.UserActions locationSearchPresenter;
@@ -50,35 +55,51 @@ public class LocationSearchFragment extends Fragment implements LocationSearchCo
     }
 
     @Override
-    public void showPopulatedList(final List<String> users) {
-        adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, users);
+    public void showPopulatedList(final List<String> locations) {
+        adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, locations);
         listView.setAdapter(adapter);
 
     }
 
     @Override
-    public void applyFilters(String filter) {
-        ArrayAdapter<String> adapter = (ArrayAdapter<String>) listView.getAdapter();
-        adapter.getFilter().filter(filter);
+    public void applyFilter(String query) {
+        adapter.getFilter().filter(query);
+
     }
 
     public void applyDynamicSearch() {
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+                if (charSequence.length() == 3) {
+                    previousQuery = charSequence.toString();
+                }
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                locationSearchPresenter.search(charSequence.toString());
+                if (charSequence.length() >= 3) {
+                    locationSearchPresenter.search(charSequence.toString());
+                }
+
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
+                if (editable.toString().length() == 3) {
+                    if (!previousQuery.equals(editable.toString())) {
+                        enableNewApiCall = true;
+                        locationSearchPresenter.search(editable.toString());
+                        Log.d("charSequence", "download using " + editable.toString());
+                    }
+                }
 
             }
+
+
         });
+
+
     }
 
 }
