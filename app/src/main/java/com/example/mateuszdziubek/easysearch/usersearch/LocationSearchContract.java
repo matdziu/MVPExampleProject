@@ -29,6 +29,8 @@ public interface LocationSearchContract {
 
         void clearListView();
 
+        void displayRecentSearches();
+
     }
 
     interface UserActions {

@@ -15,10 +15,18 @@
             android:layout_height="wrap_content"
             android:hint="@string/edittext_hint"/>
 
+        <TextView
+            android:id="@+id/recentTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Recent searches:"
+            android:layout_gravity="center_horizontal" />
+
         <ListView
             android:id="@+id/listView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
+
 
     </LinearLayout>
 

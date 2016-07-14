@@ -1,8 +1,6 @@
 package com.example.mateuszdziubek.easysearch.usersearch;
 
 
-import android.util.Log;
-
 import com.example.mateuszdziubek.easysearch.usersearch.model.LocationModel;
 import com.example.mateuszdziubek.easysearch.usersearch.model.RepositoryCallback;
 import com.example.mateuszdziubek.easysearch.usersearch.restdownload.LocationListProvider;

@@ -9,15 +9,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.mateuszdziubek.easysearch.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -39,6 +42,10 @@ public class LocationSearchFragment extends Fragment implements LocationSearchCo
 
     private TextView textView;
 
+    private List<String> recentSearches = new ArrayList<>();
+
+    private TextView recentTextView;
+
     @Inject
     LocationSearchContract.UserActions locationSearchPresenter;
 
@@ -51,6 +58,22 @@ public class LocationSearchFragment extends Fragment implements LocationSearchCo
         listView = (ListView) root.findViewById(R.id.listView);
         editText = (EditText) root.findViewById(R.id.editText);
         textView = (TextView) root.findViewById(R.id.textView);
+
+        recentTextView = (TextView) root.findViewById(R.id.recentTextView);
+        recentTextView.setVisibility(View.GONE);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String item = adapterView.getAdapter().getItem(i).toString();
+
+                Toast.makeText(getContext(), item, Toast.LENGTH_SHORT).show();
+
+                if (!recentSearches.contains(item)) {
+                    recentSearches.add(item);
+                }
+            }
+        });
 
         progressBar = (ProgressBar) root.findViewById(R.id.progressBar);
         hideProgressBar();
@@ -85,7 +108,6 @@ public class LocationSearchFragment extends Fragment implements LocationSearchCo
                 }
             }
         });
-
 
     }
 
@@ -127,6 +149,11 @@ public class LocationSearchFragment extends Fragment implements LocationSearchCo
         }
     }
 
+    @Override
+    public void displayRecentSearches() {
+
+    }
+
     public void applyDynamicSearch() {
         editText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -141,6 +168,18 @@ public class LocationSearchFragment extends Fragment implements LocationSearchCo
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (charSequence.length() >= 3 && charSequence.toString().trim().length() != 0) {
                     locationSearchPresenter.search(charSequence.toString());
+                }
+
+                if (charSequence.length() == 0) {
+                    ArrayAdapter<String> recentSearchesAdapter = new ArrayAdapter<String>(getContext(),
+                            android.R.layout.simple_list_item_1, recentSearches);
+                    listView.setAdapter(recentSearchesAdapter);
+                    recentTextView.setVisibility(View.VISIBLE);
+
+                }
+                else {
+                    recentTextView.setVisibility(View.GONE);
+                    listView.setAdapter(adapter);
                 }
 
             }
