@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import com.example.mateuszdziubek.easysearch.R;
 
@@ -31,6 +32,7 @@ public class LocationSearchFragment extends Fragment implements LocationSearchCo
 
     private boolean enableNewApiCall = false;
 
+    private ProgressBar progressBar;
 
     @Inject
     LocationSearchContract.UserActions locationSearchPresenter;
@@ -43,6 +45,9 @@ public class LocationSearchFragment extends Fragment implements LocationSearchCo
 
         listView = (ListView) root.findViewById(R.id.listView);
         editText = (EditText) root.findViewById(R.id.editText);
+
+        progressBar = (ProgressBar) root.findViewById(R.id.progressBar);
+        stopProgressBar();
 
         LocationSearchComponent locationSearchComponent = DaggerLocationSearchComponent.builder().
                 locationSearchModule(new LocationSearchModule(this)).build();
@@ -75,6 +80,16 @@ public class LocationSearchFragment extends Fragment implements LocationSearchCo
     @Override
     public void lockCacheClear() {
         enableNewApiCall = false;
+    }
+
+    @Override
+    public void startProgressBar() {
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void stopProgressBar() {
+        progressBar.setVisibility(View.GONE);
     }
 
     public void applyDynamicSearch() {

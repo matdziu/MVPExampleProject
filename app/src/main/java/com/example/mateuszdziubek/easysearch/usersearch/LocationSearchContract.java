@@ -18,6 +18,10 @@ public interface LocationSearchContract {
 
         void lockCacheClear();
 
+        void startProgressBar();
+
+        void stopProgressBar();
+
     }
 
     interface UserActions {
