@@ -1,5 +1,8 @@
 package com.example.mateuszdziubek.easysearch.usersearch;
 
+
+import android.util.Log;
+
 import com.example.mateuszdziubek.easysearch.usersearch.model.Items;
 import com.example.mateuszdziubek.easysearch.usersearch.model.LocationModel;
 import com.example.mateuszdziubek.easysearch.usersearch.model.RepositoryCallback;
@@ -28,25 +31,19 @@ public class LocationSearchPresenter implements LocationSearchContract.UserActio
         RepositoryCallback locationCallback = new LocationsCallback() {
             @Override
             public void onResult(LocationModel result) {
-                if(locationSearchView.clearCache()) {
-                    locations.clear();
-                    locationSearchView.lockCacheClear();
-                }
-
-                if (locations.size() == 0) {
-                    if (result.getItems().length > 0) {
-                        for(Items item : result.getItems()) {
-                            locations.add(item.getName());
-                        }
-
-                        locationSearchView.showPopulatedList(locations);
+                if (result.getItems().length > 0) {
+                    locationSearchView.hideProgressBar();
+                    locationSearchView.hideNoResultsTextView();
+                    for(Items item : result.getItems()) {
+                        locations.add(item.getName());
                     }
-                    else {
-                        throw new NullPointerException("no data in results");
-                    }
+
+                    locationSearchView.showPopulatedList(locations);
                 }
                 else {
-                    locationSearchView.applyFilter(query);
+                    locationSearchView.clearListView();
+                    locationSearchView.showNoResultsTextView();
+                    locationSearchView.hideProgressBar();
                 }
             }
 
@@ -56,7 +53,18 @@ public class LocationSearchPresenter implements LocationSearchContract.UserActio
             }
         };
 
-        locationsRepository.getLocations(locationCallback, query);
+        if (locationSearchView.clearCache()) {
+            locations.clear();
+            locationSearchView.lockCacheClear();
+        }
+
+        if (locations.size() == 0) {
+            locationSearchView.displayProgressBar();
+            locationsRepository.getLocations(locationCallback, query);
+        }
+        else {
+            locationSearchView.applyFilter(query);
+        }
 
     }
 

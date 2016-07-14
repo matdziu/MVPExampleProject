@@ -5,13 +5,16 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Filter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.example.mateuszdziubek.easysearch.R;
 
@@ -34,6 +37,8 @@ public class LocationSearchFragment extends Fragment implements LocationSearchCo
 
     private ProgressBar progressBar;
 
+    private TextView textView;
+
     @Inject
     LocationSearchContract.UserActions locationSearchPresenter;
 
@@ -45,9 +50,10 @@ public class LocationSearchFragment extends Fragment implements LocationSearchCo
 
         listView = (ListView) root.findViewById(R.id.listView);
         editText = (EditText) root.findViewById(R.id.editText);
+        textView = (TextView) root.findViewById(R.id.textView);
 
         progressBar = (ProgressBar) root.findViewById(R.id.progressBar);
-        stopProgressBar();
+        hideProgressBar();
 
         LocationSearchComponent locationSearchComponent = DaggerLocationSearchComponent.builder().
                 locationSearchModule(new LocationSearchModule(this)).build();
@@ -68,7 +74,18 @@ public class LocationSearchFragment extends Fragment implements LocationSearchCo
 
     @Override
     public void applyFilter(String query) {
-        adapter.getFilter().filter(query);
+        adapter.getFilter().filter(query, new Filter.FilterListener() {
+            @Override
+            public void onFilterComplete(int i) {
+                if(i == 0) {
+                    showNoResultsTextView();
+                }
+                else {
+                    hideNoResultsTextView();
+                }
+            }
+        });
+
 
     }
 
@@ -83,13 +100,31 @@ public class LocationSearchFragment extends Fragment implements LocationSearchCo
     }
 
     @Override
-    public void startProgressBar() {
+    public void displayProgressBar() {
         progressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
-    public void stopProgressBar() {
+    public void hideProgressBar() {
         progressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showNoResultsTextView() {
+        textView.setText("no results found");
+    }
+
+    @Override
+    public void hideNoResultsTextView() {
+        textView.setText("");
+    }
+
+    @Override
+    public void clearListView() {
+        if (adapter != null) {
+            adapter.clear();
+            adapter.notifyDataSetChanged();
+        }
     }
 
     public void applyDynamicSearch() {
@@ -99,11 +134,12 @@ public class LocationSearchFragment extends Fragment implements LocationSearchCo
                 if (charSequence.length() == 3) {
                     previousQuery = charSequence.toString();
                 }
+
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (charSequence.length() >= 3) {
+                if (charSequence.length() >= 3 && charSequence.toString().trim().length() != 0) {
                     locationSearchPresenter.search(charSequence.toString());
                 }
 
@@ -111,12 +147,13 @@ public class LocationSearchFragment extends Fragment implements LocationSearchCo
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if (editable.toString().length() == 3) {
+                if (editable.toString().length() == 3 && editable.toString().trim().length() != 0) {
                     if (!previousQuery.equals(editable.toString())) {
                         enableNewApiCall = true;
                         locationSearchPresenter.search(editable.toString());
                     }
                 }
+
 
             }
 

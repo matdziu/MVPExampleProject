@@ -18,6 +18,7 @@ public class LocationsRepository implements LocationSearchContract.Repository {
             public void onResponse(Call<LocationModel> call, Response<LocationModel> response) {
 //                Log.d("locationDownload", "success!");
                 locationCallback.onResult(response.body());
+
             }
 
             @Override

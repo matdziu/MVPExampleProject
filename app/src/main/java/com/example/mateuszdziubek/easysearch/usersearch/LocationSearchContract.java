@@ -18,9 +18,15 @@ public interface LocationSearchContract {
 
         void lockCacheClear();
 
-        void startProgressBar();
+        void displayProgressBar();
 
-        void stopProgressBar();
+        void hideProgressBar();
+
+        void showNoResultsTextView();
+
+        void hideNoResultsTextView();
+
+        void clearListView();
 
     }
 
