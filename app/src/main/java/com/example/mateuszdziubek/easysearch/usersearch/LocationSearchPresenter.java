@@ -31,7 +31,7 @@ public class LocationSearchPresenter implements LocationSearchContract.UserActio
         RepositoryCallback locationCallback = new LocationsCallback() {
             @Override
             public void onResult(LocationModel result) {
-                if (result.getItems().length > 0) {
+                if (result != null && result.getItems().length > 0) {
                     locationSearchView.hideProgressBar();
                     locationSearchView.hideNoResultsTextView();
                     for(Items item : result.getItems()) {
