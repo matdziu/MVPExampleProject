@@ -1,6 +1,9 @@
 package com.example.mateuszdziubek.easysearch.usersearch;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -21,7 +24,10 @@ import android.widget.Toast;
 import com.example.mateuszdziubek.easysearch.R;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -46,6 +52,9 @@ public class LocationSearchFragment extends Fragment implements LocationSearchCo
 
     private TextView recentTextView;
 
+    private ArrayAdapter<String> recentSearchesAdapter;
+
+
     @Inject
     LocationSearchContract.UserActions locationSearchPresenter;
 
@@ -60,7 +69,7 @@ public class LocationSearchFragment extends Fragment implements LocationSearchCo
         textView = (TextView) root.findViewById(R.id.textView);
 
         recentTextView = (TextView) root.findViewById(R.id.recentTextView);
-        recentTextView.setVisibility(View.GONE);
+//        recentTextView.setVisibility(View.GONE);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -85,7 +94,28 @@ public class LocationSearchFragment extends Fragment implements LocationSearchCo
 
         applyDynamicSearch();
 
+
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("PREF", Context.MODE_PRIVATE);
+
+        recentSearches = new ArrayList<>(sharedPreferences.getStringSet("recentSearches", new HashSet<String>()));
+
+        recentSearchesAdapter = new ArrayAdapter<>(getContext(),
+                android.R.layout.simple_list_item_1, recentSearches);
+
+        listView.setAdapter(recentSearchesAdapter);
+
+
+
         return root;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("PREF", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putStringSet("recentSearches", new HashSet<>(recentSearches));
+        editor.commit();
     }
 
     @Override
@@ -171,10 +201,11 @@ public class LocationSearchFragment extends Fragment implements LocationSearchCo
                 }
 
                 if (charSequence.length() == 0) {
-                    ArrayAdapter<String> recentSearchesAdapter = new ArrayAdapter<String>(getContext(),
+                    recentSearchesAdapter = new ArrayAdapter<>(getContext(),
                             android.R.layout.simple_list_item_1, recentSearches);
                     listView.setAdapter(recentSearchesAdapter);
                     recentTextView.setVisibility(View.VISIBLE);
+                    hideNoResultsTextView();
 
                 }
                 else {
