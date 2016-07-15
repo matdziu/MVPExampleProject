@@ -3,12 +3,10 @@ package com.example.mateuszdziubek.easysearch.usersearch;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,10 +22,8 @@ import android.widget.Toast;
 import com.example.mateuszdziubek.easysearch.R;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -69,7 +65,6 @@ public class LocationSearchFragment extends Fragment implements LocationSearchCo
         textView = (TextView) root.findViewById(R.id.textView);
 
         recentTextView = (TextView) root.findViewById(R.id.recentTextView);
-//        recentTextView.setVisibility(View.GONE);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -179,11 +174,6 @@ public class LocationSearchFragment extends Fragment implements LocationSearchCo
         }
     }
 
-    @Override
-    public void displayRecentSearches() {
-
-    }
-
     public void applyDynamicSearch() {
         editText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -196,9 +186,7 @@ public class LocationSearchFragment extends Fragment implements LocationSearchCo
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (charSequence.length() >= 3 && charSequence.toString().trim().length() != 0) {
-                    locationSearchPresenter.search(charSequence.toString());
-                }
+                locationSearchPresenter.search(charSequence.toString());
 
                 if (charSequence.length() == 0) {
                     recentSearchesAdapter = new ArrayAdapter<>(getContext(),

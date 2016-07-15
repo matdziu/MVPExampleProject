@@ -19,6 +19,13 @@ public class LocationsRepository implements LocationSearchContract.Repository {
 
     private Map<String, Long> cacheTimeMap = new HashMap<>();
 
+    private LocationListProvider locationListProvider;
+
+    public LocationsRepository(LocationListProvider locationListProvider) {
+        this.locationListProvider = locationListProvider;
+    }
+
+
     @Override
     public void getLocations(final RepositoryCallback<LocationModel> locationCallback, final String query) {
         final Callback<LocationModel> retrofitCallback = new Callback<LocationModel>() {
@@ -32,10 +39,10 @@ public class LocationsRepository implements LocationSearchContract.Repository {
                     cacheTimeMap.put(query, Calendar.getInstance().getTimeInMillis());
 
                 }
-                else if (cacheMap.containsKey(query) &&
-                        (Calendar.getInstance().getTimeInMillis() - cacheTimeMap.get(query).longValue()) <= 60000) {
-                    locationCallback.onResult(cacheMap.get(query));
-                }
+//                else if (cacheMap.containsKey(query) &&
+//                        (Calendar.getInstance().getTimeInMillis() - cacheTimeMap.get(query).longValue()) <= 60000) {
+//                    locationCallback.onResult(cacheMap.get(query));
+//                }
                 else {
                     locationCallback.onResult(null);
                 }
@@ -56,7 +63,6 @@ public class LocationsRepository implements LocationSearchContract.Repository {
             }
         };
 
-        LocationListProvider locationListProvider = new LocationListProvider();
         locationListProvider.downloadLocations(retrofitCallback, query);
     }
 

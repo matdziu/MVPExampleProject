@@ -1,5 +1,7 @@
 package com.example.mateuszdziubek.easysearch.usersearch;
 
+import com.example.mateuszdziubek.easysearch.usersearch.restdownload.LocationListProvider;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -22,13 +24,19 @@ public class LocationSearchModule {
 
     @Provides
     @Singleton
-    public LocationSearchContract.Repository provideUsersRepository() {
-        return new LocationsRepository();
+    public LocationSearchContract.Repository provideUsersRepository(LocationListProvider locationListProvider) {
+        return new LocationsRepository(locationListProvider);
     }
 
     @Provides
     @Singleton
     public LocationSearchContract.View provideUserSearchView() {
         return userSearchView;
+    }
+
+    @Provides
+    @Singleton
+    public LocationListProvider provideLocationListProvider() {
+        return new LocationListProvider();
     }
 }
