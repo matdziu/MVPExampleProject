@@ -42,7 +42,5 @@ public interface LocationSearchContract {
 
         void getLocations(RepositoryCallback<LocationModel> locationCallback, String query);
 
-        Map<String, LocationModel> getCacheMap();
-
     }
 }

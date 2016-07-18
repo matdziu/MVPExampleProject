@@ -77,7 +77,7 @@ public class LocationsRepositoryTest {
 //            }
 //        }).when(locationProvider).downloadLocations(retrofitCallbackCaptor.capture(), anyString());
 
-        verify(locationProvider).downloadLocations(retrofitCallbackCaptor.capture(), anyString());
+//        verify(locationProvider).downloadLocations(retrofitCallbackCaptor.capture(), anyString());
         retrofitCallbackCaptor.getValue().onResponse(call, Response.<LocationModel>error(404, ResponseBody.create(MediaType.parse(""), "")));
 
         repositoryCallbackArgumentCaptor.getValue().onResult(null);
