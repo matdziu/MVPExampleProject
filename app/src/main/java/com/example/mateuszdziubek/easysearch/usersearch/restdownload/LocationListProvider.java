@@ -44,6 +44,7 @@ public class LocationListProvider {
 
                     @Override
                     public void onError(Throwable e) {
+                        //if exists taking data from cache
                         if (cacheMap.containsKey(query) &&
                             (Calendar.getInstance().getTimeInMillis() - cacheTimeMap.get(query).longValue()) <= 60000) {
                         callback.onResult(cacheMap.get(query));

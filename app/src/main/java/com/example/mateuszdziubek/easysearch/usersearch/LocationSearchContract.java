@@ -4,7 +4,6 @@ import com.example.mateuszdziubek.easysearch.usersearch.model.LocationModel;
 import com.example.mateuszdziubek.easysearch.usersearch.model.RepositoryCallback;
 
 import java.util.List;
-import java.util.Map;
 
 
 public interface LocationSearchContract {
@@ -28,7 +27,6 @@ public interface LocationSearchContract {
         void hideNoResultsTextView();
 
         void clearListView();
-
 
     }
 

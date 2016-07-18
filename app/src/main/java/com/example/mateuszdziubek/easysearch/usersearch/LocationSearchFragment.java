@@ -206,12 +206,11 @@ public class LocationSearchFragment extends Fragment implements LocationSearchCo
             @Override
             public void afterTextChanged(Editable editable) {
                 if (editable.toString().length() == 3 && editable.toString().trim().length() != 0) {
-                    if (!previousQuery.equals(editable.toString())) {
+                    if (!previousQuery.equals(editable.toString()) && !previousQuery.isEmpty()) {
                         enableNewApiCall = true;
                         locationSearchPresenter.search(editable.toString());
                     }
                 }
-
 
             }
 
