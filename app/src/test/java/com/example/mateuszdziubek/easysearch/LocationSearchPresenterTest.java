@@ -7,13 +7,17 @@ import com.example.mateuszdziubek.easysearch.usersearch.model.RepositoryCallback
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import retrofit2.Response;
+import rx.Observable;
+
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 
 public class LocationSearchPresenterTest {
@@ -24,38 +28,41 @@ public class LocationSearchPresenterTest {
     @Mock
     LocationSearchContract.Repository locationsRepository;
 
+    @Mock
+    LocationSearchContract.CacheProvider cacheProvider;
+
+    @Mock
+    RepositoryCallback<LocationModel> repositoryCallback;
+
+    @Mock
+    LocationModel locationModel;
+
     private LocationSearchPresenter locationSearchPresenter;
 
-    @Captor
-    private ArgumentCaptor<RepositoryCallback<LocationModel>> repositoryCallbackArgumentCaptor;
 
-    @Captor
-    private ArgumentCaptor<String> locationArgumentCaptor;
+    @Before
+    public void setUp() {
+        MockitoAnnotations.initMocks(this);
+        locationSearchPresenter =
+                new LocationSearchPresenter(locationSearchView, locationsRepository, cacheProvider);
+    }
 
 
-//    @Before
-//    public void setUp() {
-//        MockitoAnnotations.initMocks(this);
-//        locationSearchPresenter =
-//                new LocationSearchPresenter(locationSearchView, locationsRepository);
-//    }
-//
-//
-//    @Test
-//    public void isThreeLetterQueryResultingInAPICall() {
-//        String location = "abc";
-//        locationSearchPresenter.search(location);
-//        verify(locationsRepository).getLocations(repositoryCallbackArgumentCaptor.capture(),
-//                locationArgumentCaptor.capture());
-//    }
-//
-//    @Test
-//    public void isTwoLetterQueryResultingInNoAPICall() {
-//        String location = "ab";
-//        locationSearchPresenter.search(location);
-//        verify(locationsRepository, never()).getLocations(repositoryCallbackArgumentCaptor.capture(),
-//                locationArgumentCaptor.capture());
-//    }
+    @Test
+    public void isThreeLetterQueryResultingInAPICall() {
+        when(locationsRepository.getLocations(anyString())).thenReturn(Observable.just(Response.success(locationModel)));
+
+        locationSearchPresenter.search("abc");
+        verify(locationsRepository).getLocations("abc");
+    }
+
+    @Test
+    public void isTwoLetterQueryResultingInNoAPICall() {
+        String location = "ab";
+        locationSearchPresenter.search(location);
+        verify(locationsRepository, never()).getLocations(eq(location));
+    }
+
 
 
 }

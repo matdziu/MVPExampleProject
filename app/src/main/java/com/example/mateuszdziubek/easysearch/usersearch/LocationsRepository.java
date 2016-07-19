@@ -6,6 +6,8 @@ import com.example.mateuszdziubek.easysearch.usersearch.restdownload.ApiProvider
 
 import retrofit2.Response;
 import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class LocationsRepository implements LocationSearchContract.Repository {
 
@@ -18,7 +20,9 @@ public class LocationsRepository implements LocationSearchContract.Repository {
 
     @Override
     public Observable<Response<LocationModel>> getLocations(String query) {
-        return apiProvider.downloadLocations(query);
+        return apiProvider.downloadLocations(query)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
 }
