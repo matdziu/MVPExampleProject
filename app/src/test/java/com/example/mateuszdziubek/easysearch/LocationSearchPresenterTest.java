@@ -33,29 +33,29 @@ public class LocationSearchPresenterTest {
     private ArgumentCaptor<String> locationArgumentCaptor;
 
 
-    @Before
-    public void setUp() {
-        MockitoAnnotations.initMocks(this);
-        locationSearchPresenter =
-                new LocationSearchPresenter(locationSearchView, locationsRepository);
-    }
-
-
-    @Test
-    public void isThreeLetterQueryResultingInAPICall() {
-        String location = "abc";
-        locationSearchPresenter.search(location);
-        verify(locationsRepository).getLocations(repositoryCallbackArgumentCaptor.capture(),
-                locationArgumentCaptor.capture());
-    }
-
-    @Test
-    public void isTwoLetterQueryResultingInNoAPICall() {
-        String location = "ab";
-        locationSearchPresenter.search(location);
-        verify(locationsRepository, never()).getLocations(repositoryCallbackArgumentCaptor.capture(),
-                locationArgumentCaptor.capture());
-    }
+//    @Before
+//    public void setUp() {
+//        MockitoAnnotations.initMocks(this);
+//        locationSearchPresenter =
+//                new LocationSearchPresenter(locationSearchView, locationsRepository);
+//    }
+//
+//
+//    @Test
+//    public void isThreeLetterQueryResultingInAPICall() {
+//        String location = "abc";
+//        locationSearchPresenter.search(location);
+//        verify(locationsRepository).getLocations(repositoryCallbackArgumentCaptor.capture(),
+//                locationArgumentCaptor.capture());
+//    }
+//
+//    @Test
+//    public void isTwoLetterQueryResultingInNoAPICall() {
+//        String location = "ab";
+//        locationSearchPresenter.search(location);
+//        verify(locationsRepository, never()).getLocations(repositoryCallbackArgumentCaptor.capture(),
+//                locationArgumentCaptor.capture());
+//    }
 
 
 }

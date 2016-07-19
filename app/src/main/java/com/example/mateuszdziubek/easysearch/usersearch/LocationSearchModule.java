@@ -1,6 +1,9 @@
 package com.example.mateuszdziubek.easysearch.usersearch;
 
-import com.example.mateuszdziubek.easysearch.usersearch.restdownload.LocationListProvider;
+import com.example.mateuszdziubek.easysearch.usersearch.restdownload.ApiProvider;
+import com.example.mateuszdziubek.easysearch.usersearch.restdownload.CacheProvider;
+
+import java.util.HashMap;
 
 import javax.inject.Singleton;
 
@@ -18,14 +21,15 @@ public class LocationSearchModule {
 
     @Provides
     @Singleton
-    public LocationSearchContract.UserActions userSearchPresenter(LocationSearchContract.View view, LocationSearchContract.Repository repository) {
-        return new LocationSearchPresenter(view, repository);
+    public LocationSearchContract.UserActions userSearchPresenter(LocationSearchContract.View view, LocationSearchContract.Repository repository,
+                                                                  LocationSearchContract.CacheProvider cacheProvider) {
+        return new LocationSearchPresenter(view, repository, cacheProvider);
     }
 
     @Provides
     @Singleton
-    public LocationSearchContract.Repository provideUsersRepository(LocationListProvider locationListProvider) {
-        return new LocationsRepository(locationListProvider);
+    public LocationSearchContract.Repository provideUsersRepository(ApiProvider apiProvider) {
+        return new LocationsRepository(apiProvider);
     }
 
     @Provides
@@ -36,7 +40,13 @@ public class LocationSearchModule {
 
     @Provides
     @Singleton
-    public LocationListProvider provideLocationListProvider() {
-        return new LocationListProvider();
+    public ApiProvider provideLocationListProvider() {
+        return new ApiProvider();
+    }
+
+    @Provides
+    @Singleton
+    public LocationSearchContract.CacheProvider provideCacheProvider() {
+        return new CacheProvider(new HashMap<>(), new HashMap<>());
     }
 }

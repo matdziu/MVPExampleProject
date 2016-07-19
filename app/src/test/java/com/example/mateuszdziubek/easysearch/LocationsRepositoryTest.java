@@ -4,7 +4,7 @@ import com.example.mateuszdziubek.easysearch.usersearch.LocationSearchContract;
 import com.example.mateuszdziubek.easysearch.usersearch.LocationsRepository;
 import com.example.mateuszdziubek.easysearch.usersearch.model.LocationModel;
 import com.example.mateuszdziubek.easysearch.usersearch.model.RepositoryCallback;
-import com.example.mateuszdziubek.easysearch.usersearch.restdownload.LocationListProvider;
+import com.example.mateuszdziubek.easysearch.usersearch.restdownload.ApiProvider;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -43,7 +43,7 @@ public class LocationsRepositoryTest {
     private ArgumentCaptor<Response<LocationModel>> responseCaptor;
 
     @Mock
-    private LocationListProvider locationProvider;
+    private ApiProvider locationProvider;
 
     @Mock
     private RepositoryCallback<LocationModel> repositoryCallback;
@@ -64,7 +64,7 @@ public class LocationsRepositoryTest {
     public void isFailureInAPICallResultingInCacheLoading() {
 //        when(response.isSuccessful()).thenReturn(false);
 
-        locationsRepository.getLocations(repositoryCallbackArgumentCaptor.capture(), anyString());
+//        locationsRepository.getLocations(repositoryCallbackArgumentCaptor.capture(), anyString());
 
 //        doAnswer(new Answer() {
 //            @Override

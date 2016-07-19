@@ -1,9 +1,13 @@
 package com.example.mateuszdziubek.easysearch.usersearch;
 
+import android.location.Location;
+
 import com.example.mateuszdziubek.easysearch.usersearch.model.LocationModel;
-import com.example.mateuszdziubek.easysearch.usersearch.model.RepositoryCallback;
 
 import java.util.List;
+
+import retrofit2.Response;
+import rx.Observable;
 
 
 public interface LocationSearchContract {
@@ -38,7 +42,14 @@ public interface LocationSearchContract {
 
     interface Repository {
 
-        void getLocations(RepositoryCallback<LocationModel> locationCallback, String query);
+        Observable<Response<LocationModel>> getLocations(String query);
 
+    }
+
+    interface CacheProvider {
+
+        LocationModel getCache(String query);
+
+        void setCache(String query, LocationModel locationModel);
     }
 }
