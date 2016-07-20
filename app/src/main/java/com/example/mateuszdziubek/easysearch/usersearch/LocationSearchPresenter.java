@@ -7,9 +7,7 @@ import com.example.mateuszdziubek.easysearch.usersearch.model.LocationModel;
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit2.Response;
 import rx.Subscription;
-import rx.functions.Action1;
 
 
 public class LocationSearchPresenter implements LocationSearchContract.UserActions {
@@ -23,10 +21,6 @@ public class LocationSearchPresenter implements LocationSearchContract.UserActio
     private List<String> locations = new ArrayList<>();
 
     private Subscription subscription;
-
-    private Action1<Response<LocationModel>> onNextAction;
-
-    private Action1<Throwable> onErrorAction;
 
     public LocationSearchPresenter(LocationSearchContract.View locationSearchView,
                                    LocationSearchContract.Repository locationsRepository,
@@ -47,11 +41,20 @@ public class LocationSearchPresenter implements LocationSearchContract.UserActio
             if (locations.size() == 0) {
                 locationSearchView.displayProgressBar();
 
-                defineObserverActions(query);
                 subscription = locationsRepository.getLocations(query)
-                        .subscribe(onNextAction, onErrorAction);
-            }
-            else {
+                        .subscribe(
+                                locationModel -> {
+                                    //putting data to cache
+                                    cacheProvider.setCache(query, locationModel);
+                                    handleResult(locationModel);
+
+                                },
+
+                                error -> {
+                                    handleResult(cacheProvider.getCache(query));
+                                }
+                        );
+            } else {
                 locationSearchView.applyFilter(query);
             }
         }
@@ -67,40 +70,17 @@ public class LocationSearchPresenter implements LocationSearchContract.UserActio
         if (result != null && result.getItems().length > 0) {
             locationSearchView.hideProgressBar();
             locationSearchView.hideNoResultsTextView();
-            for(Items item : result.getItems()) {
+
+            for (Items item : result.getItems()) {
                 locations.add(item.getName());
             }
 
             locationSearchView.showPopulatedList(locations);
-        }
-        else {
+        } else {
             locationSearchView.clearListView();
             locationSearchView.showNoResultsTextView();
             locationSearchView.hideProgressBar();
         }
-    }
-
-    private void defineObserverActions(String query) {
-        onNextAction = new Action1<Response<LocationModel>>() {
-            @Override
-            public void call(Response<LocationModel> response) {
-                if (response.isSuccessful()) {
-                    //putting data to cache
-                    cacheProvider.setCache(query, response.body());
-
-                    handleResult(response.body());
-                } else {
-                    handleResult(cacheProvider.getCache(query));
-                }
-            }
-        };
-
-        onErrorAction = new Action1<Throwable>() {
-            @Override
-            public void call(Throwable e) {
-                handleResult(cacheProvider.getCache(query));
-        }
-    };
     }
 
 }

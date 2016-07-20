@@ -1,12 +1,9 @@
 package com.example.mateuszdziubek.easysearch.usersearch;
 
-import android.location.Location;
-
 import com.example.mateuszdziubek.easysearch.usersearch.model.LocationModel;
 
 import java.util.List;
 
-import retrofit2.Response;
 import rx.Observable;
 
 
@@ -44,7 +41,7 @@ public interface LocationSearchContract {
 
     interface Repository {
 
-        Observable<Response<LocationModel>> getLocations(String query);
+        Observable<LocationModel> getLocations(String query);
 
     }
 

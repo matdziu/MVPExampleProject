@@ -50,7 +50,7 @@ public class LocationSearchPresenterTest {
 
     @Test
     public void isThreeLetterQueryResultingInAPICall() {
-        when(locationsRepository.getLocations(anyString())).thenReturn(Observable.just(Response.success(locationModel)));
+        when(locationsRepository.getLocations(anyString())).thenReturn(Observable.just(locationModel));
 
         locationSearchPresenter.search("abc");
         verify(locationsRepository).getLocations("abc");
