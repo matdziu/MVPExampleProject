@@ -8,7 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Response;
-import rx.Subscriber;
+import rx.Subscription;
+import rx.functions.Action1;
 
 
 public class LocationSearchPresenter implements LocationSearchContract.UserActions {
@@ -20,6 +21,12 @@ public class LocationSearchPresenter implements LocationSearchContract.UserActio
     private LocationSearchContract.CacheProvider cacheProvider;
 
     private List<String> locations = new ArrayList<>();
+
+    private Subscription subscription;
+
+    private Action1<Response<LocationModel>> onNextAction;
+
+    private Action1<Throwable> onErrorAction;
 
     public LocationSearchPresenter(LocationSearchContract.View locationSearchView,
                                    LocationSearchContract.Repository locationsRepository,
@@ -39,37 +46,21 @@ public class LocationSearchPresenter implements LocationSearchContract.UserActio
 
             if (locations.size() == 0) {
                 locationSearchView.displayProgressBar();
-                locationsRepository.getLocations(query)
-                    .subscribe(new Subscriber<Response<LocationModel>>() {
-                            @Override
-                            public void onCompleted() {
 
-                            }
-
-                            @Override
-                            public void onError(Throwable e) {
-                                handleResult(cacheProvider.getCache(query));
-                            }
-
-                            @Override
-                            public void onNext(Response<LocationModel> response) {
-                                if (response.isSuccessful()) {
-                                    //putting data to cache
-                                    cacheProvider.setCache(query, response.body());
-
-                                    handleResult(response.body());
-                                }
-                                else {
-                                    handleResult(cacheProvider.getCache(query));
-                                }
-                            }
-                        });
+                defineObserverActions(query);
+                subscription = locationsRepository.getLocations(query)
+                        .subscribe(onNextAction, onErrorAction);
             }
             else {
                 locationSearchView.applyFilter(query);
             }
         }
 
+    }
+
+    @Override
+    public void unsubscribe() {
+        subscription.unsubscribe();
     }
 
     private void handleResult(LocationModel result) {
@@ -87,6 +78,29 @@ public class LocationSearchPresenter implements LocationSearchContract.UserActio
             locationSearchView.showNoResultsTextView();
             locationSearchView.hideProgressBar();
         }
+    }
+
+    private void defineObserverActions(String query) {
+        onNextAction = new Action1<Response<LocationModel>>() {
+            @Override
+            public void call(Response<LocationModel> response) {
+                if (response.isSuccessful()) {
+                    //putting data to cache
+                    cacheProvider.setCache(query, response.body());
+
+                    handleResult(response.body());
+                } else {
+                    handleResult(cacheProvider.getCache(query));
+                }
+            }
+        };
+
+        onErrorAction = new Action1<Throwable>() {
+            @Override
+            public void call(Throwable e) {
+                handleResult(cacheProvider.getCache(query));
+        }
+    };
     }
 
 }

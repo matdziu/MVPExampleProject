@@ -38,6 +38,8 @@ public interface LocationSearchContract {
 
         void search(String query);
 
+        void unsubscribe();
+
     }
 
     interface Repository {

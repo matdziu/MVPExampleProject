@@ -214,9 +214,13 @@ public class LocationSearchFragment extends Fragment implements LocationSearchCo
 
             }
 
-
         });
 
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        locationSearchPresenter.unsubscribe();
+    }
 }
