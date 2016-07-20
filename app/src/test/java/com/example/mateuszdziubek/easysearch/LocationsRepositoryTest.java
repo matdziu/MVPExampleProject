@@ -48,19 +48,15 @@ public class LocationsRepositoryTest {
     }
 
     @Test
-    public void testingWithTestSubscriber() {
+    public void isObservableCarryingCorrectlyOneModel() {
         TestSubscriber<Response<LocationModel>> testSubscriber = new TestSubscriber<>();
         when(apiProvider.downloadLocations(anyString())).thenReturn(Observable.just(Response.success(locationModel)));
 
         Observable<Response<LocationModel>> observable = locationsRepository.getLocations(anyString());
-        verify(apiProvider).downloadLocations(anyString());
         observable.subscribe(testSubscriber);
 
         testSubscriber.assertNoErrors();
         testSubscriber.assertValueCount(1);
 
     }
-
-
-
 }
