@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.Calendar;
 import java.util.Map;
 
 import static org.mockito.Matchers.anyString;
@@ -35,8 +36,9 @@ public class CacheProviderTest {
 
     @Test
     public void isCacheLoadedAtCorrectTime() {
-        //HOW TO TEST TIME?
+        when(cacheTimeMap.get(anyString())).thenReturn(Calendar.getInstance().getTimeInMillis() - 30000L);
         when(cacheMap.containsKey(anyString())).thenReturn(true);
+
 
         cacheProvider.getCache("abc");
         verify(cacheMap).get("abc");

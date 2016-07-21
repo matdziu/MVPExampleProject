@@ -16,18 +16,14 @@ public class LocationSearchPresenter implements LocationSearchContract.UserActio
 
     private LocationSearchContract.Repository locationsRepository;
 
-    private LocationSearchContract.CacheProvider cacheProvider;
-
     private List<String> locations = new ArrayList<>();
 
     private Subscription subscription;
 
     public LocationSearchPresenter(LocationSearchContract.View locationSearchView,
-                                   LocationSearchContract.Repository locationsRepository,
-                                   LocationSearchContract.CacheProvider cacheProvider) {
+                                   LocationSearchContract.Repository locationsRepository) {
         this.locationSearchView = locationSearchView;
         this.locationsRepository = locationsRepository;
-        this.cacheProvider = cacheProvider;
     }
 
     @Override
@@ -41,17 +37,17 @@ public class LocationSearchPresenter implements LocationSearchContract.UserActio
             if (locations.size() == 0) {
                 locationSearchView.displayProgressBar();
 
-                subscription = locationsRepository.getLocations(query)
+                subscription = locationsRepository.getLocationsOnline(query)
                         .subscribe(
                                 locationModel -> {
                                     //putting data to cache
-                                    cacheProvider.setCache(query, locationModel);
+                                    locationsRepository.setLocationsOffline(query, locationModel);
                                     handleResult(locationModel);
 
                                 },
 
                                 error -> {
-                                    handleResult(cacheProvider.getCache(query));
+                                    handleResult(locationsRepository.getLocationsOffline(query));
                                 }
                         );
             } else {

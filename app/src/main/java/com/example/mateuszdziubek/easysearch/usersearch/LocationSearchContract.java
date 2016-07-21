@@ -41,7 +41,11 @@ public interface LocationSearchContract {
 
     interface Repository {
 
-        Observable<LocationModel> getLocations(String query);
+        Observable<LocationModel> getLocationsOnline(String query);
+
+        LocationModel getLocationsOffline(String query);
+
+        void setLocationsOffline(String query, LocationModel locationModel);
 
     }
 

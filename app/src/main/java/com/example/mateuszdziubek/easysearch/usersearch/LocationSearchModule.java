@@ -21,15 +21,14 @@ public class LocationSearchModule {
 
     @Provides
     @Singleton
-    public LocationSearchContract.UserActions userSearchPresenter(LocationSearchContract.View view, LocationSearchContract.Repository repository,
-                                                                  LocationSearchContract.CacheProvider cacheProvider) {
-        return new LocationSearchPresenter(view, repository, cacheProvider);
+    public LocationSearchContract.UserActions userSearchPresenter(LocationSearchContract.View view, LocationSearchContract.Repository repository) {
+        return new LocationSearchPresenter(view, repository);
     }
 
     @Provides
     @Singleton
-    public LocationSearchContract.Repository provideUsersRepository(ApiProvider apiProvider) {
-        return new LocationsRepository(apiProvider);
+    public LocationSearchContract.Repository provideUsersRepository(ApiProvider apiProvider, LocationSearchContract.CacheProvider cacheProvider) {
+        return new LocationsRepository(apiProvider, cacheProvider);
     }
 
     @Provides

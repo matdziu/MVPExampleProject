@@ -12,13 +12,16 @@ public class LocationsRepository implements LocationSearchContract.Repository {
 
     private ApiProvider apiProvider;
 
-    public LocationsRepository(ApiProvider apiProvider) {
+    private LocationSearchContract.CacheProvider cacheProvider;
+
+    public LocationsRepository(ApiProvider apiProvider, LocationSearchContract.CacheProvider cacheProvider) {
         this.apiProvider = apiProvider;
+        this.cacheProvider = cacheProvider;
     }
 
 
     @Override
-    public Observable<LocationModel> getLocations(String query) {
+    public Observable<LocationModel> getLocationsOnline(String query) {
         return apiProvider.downloadLocations(query)
                 .subscribeOn(Schedulers.newThread())
                 .flatMap(response -> {
@@ -29,6 +32,16 @@ public class LocationsRepository implements LocationSearchContract.Repository {
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    @Override
+    public LocationModel getLocationsOffline(String query) {
+        return cacheProvider.getCache(query);
+    }
+
+    @Override
+    public void setLocationsOffline(String query, LocationModel locationModel) {
+        cacheProvider.setCache(query, locationModel);
     }
 
 }

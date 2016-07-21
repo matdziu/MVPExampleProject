@@ -10,7 +10,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import retrofit2.Response;
 import rx.Observable;
 
 import static org.mockito.Matchers.anyString;
@@ -44,23 +43,23 @@ public class LocationSearchPresenterTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         locationSearchPresenter =
-                new LocationSearchPresenter(locationSearchView, locationsRepository, cacheProvider);
+                new LocationSearchPresenter(locationSearchView, locationsRepository);
     }
 
 
     @Test
     public void isThreeLetterQueryResultingInAPICall() {
-        when(locationsRepository.getLocations(anyString())).thenReturn(Observable.just(locationModel));
+        when(locationsRepository.getLocationsOnline(anyString())).thenReturn(Observable.just(locationModel));
 
         locationSearchPresenter.search("abc");
-        verify(locationsRepository).getLocations("abc");
+        verify(locationsRepository).getLocationsOnline("abc");
     }
 
     @Test
     public void isTwoLetterQueryResultingInNoAPICall() {
         String location = "ab";
         locationSearchPresenter.search(location);
-        verify(locationsRepository, never()).getLocations(eq(location));
+        verify(locationsRepository, never()).getLocationsOnline(eq(location));
     }
 
 
