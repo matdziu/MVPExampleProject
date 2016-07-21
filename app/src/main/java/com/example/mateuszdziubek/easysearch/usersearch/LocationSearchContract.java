@@ -41,17 +41,13 @@ public interface LocationSearchContract {
 
     interface Repository {
 
-        Observable<LocationModel> getLocationsOnline(String query);
-
-        LocationModel getLocationsOffline(String query);
-
-        void setLocationsOffline(String query, LocationModel locationModel);
+        Observable<LocationModel> getLocations(String query);
 
     }
 
     interface CacheProvider {
 
-        LocationModel getCache(String query);
+        Observable<LocationModel> getCache(String query);
 
         void setCache(String query, LocationModel locationModel);
     }

@@ -47,7 +47,7 @@ public class LocationsRepositoryTest {
     public void isRepositoryCallResultingInObservableWithResponse() {
         when(apiProvider.downloadLocations(anyString())).thenReturn(Observable.just(Response.success(locationModel)));
 
-        locationsRepository.getLocationsOnline(anyString());
+        locationsRepository.getLocations(anyString());
         verify(apiProvider).downloadLocations(anyString());
     }
 
@@ -56,17 +56,11 @@ public class LocationsRepositoryTest {
         TestSubscriber<LocationModel> testSubscriber = new TestSubscriber<>();
         when(apiProvider.downloadLocations(anyString())).thenReturn(Observable.just(Response.success(locationModel)));
 
-        Observable<LocationModel> observable = locationsRepository.getLocationsOnline(anyString());
+        Observable<LocationModel> observable = locationsRepository.getLocations(anyString());
         observable.subscribe(testSubscriber);
 
         testSubscriber.assertNoErrors();
         testSubscriber.assertValueCount(1);
 
-    }
-
-    @Test
-    public void isGetLocationsOfflineCallingCacheProvider() {
-        locationsRepository.getLocationsOffline("test");
-        verify(cacheProvider).getCache("test");
     }
 }

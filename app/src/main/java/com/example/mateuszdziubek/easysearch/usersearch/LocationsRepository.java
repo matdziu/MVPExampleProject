@@ -21,27 +21,14 @@ public class LocationsRepository implements LocationSearchContract.Repository {
 
 
     @Override
-    public Observable<LocationModel> getLocationsOnline(String query) {
-        return apiProvider.downloadLocations(query)
+    public Observable<LocationModel> getLocations(String query) {
+        Observable<LocationModel> cache = cacheProvider.getCache(query);
+        Observable<LocationModel> networkWithSave = apiProvider.downloadLocations(query)
+                .doOnNext(locationModel -> cacheProvider.setCache(query, locationModel));
+        return Observable.concat(cache, networkWithSave).first()
                 .subscribeOn(Schedulers.newThread())
-                .flatMap(response -> {
-                    if(response.isSuccessful()) {
-                        return Observable.just(response.body());
-                    } else {
-                        return Observable.error(new Exception());
-                    }
-                })
                 .observeOn(AndroidSchedulers.mainThread());
-    }
 
-    @Override
-    public LocationModel getLocationsOffline(String query) {
-        return cacheProvider.getCache(query);
-    }
-
-    @Override
-    public void setLocationsOffline(String query, LocationModel locationModel) {
-        cacheProvider.setCache(query, locationModel);
     }
 
 }

@@ -49,17 +49,17 @@ public class LocationSearchPresenterTest {
 
     @Test
     public void isThreeLetterQueryResultingInAPICall() {
-        when(locationsRepository.getLocationsOnline(anyString())).thenReturn(Observable.just(locationModel));
+        when(locationsRepository.getLocations(anyString())).thenReturn(Observable.just(locationModel));
 
         locationSearchPresenter.search("abc");
-        verify(locationsRepository).getLocationsOnline("abc");
+        verify(locationsRepository).getLocations("abc");
     }
 
     @Test
     public void isTwoLetterQueryResultingInNoAPICall() {
         String location = "ab";
         locationSearchPresenter.search(location);
-        verify(locationsRepository, never()).getLocationsOnline(eq(location));
+        verify(locationsRepository, never()).getLocations(eq(location));
     }
 
 

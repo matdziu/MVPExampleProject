@@ -1,6 +1,8 @@
 package com.example.mateuszdziubek.easysearch.usersearch;
 
 
+import android.util.Log;
+
 import com.example.mateuszdziubek.easysearch.usersearch.model.Items;
 import com.example.mateuszdziubek.easysearch.usersearch.model.LocationModel;
 
@@ -37,17 +39,14 @@ public class LocationSearchPresenter implements LocationSearchContract.UserActio
             if (locations.size() == 0) {
                 locationSearchView.displayProgressBar();
 
-                subscription = locationsRepository.getLocationsOnline(query)
+                subscription = locationsRepository.getLocations(query)
                         .subscribe(
                                 locationModel -> {
-                                    //putting data to cache
-                                    locationsRepository.setLocationsOffline(query, locationModel);
                                     handleResult(locationModel);
-
                                 },
 
                                 error -> {
-                                    handleResult(locationsRepository.getLocationsOffline(query));
+                                    locationSearchView.hideProgressBar();
                                 }
                         );
             } else {

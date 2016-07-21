@@ -7,6 +7,8 @@ import com.example.mateuszdziubek.easysearch.usersearch.model.LocationModel;
 import java.util.Calendar;
 import java.util.Map;
 
+import rx.Observable;
+
 public class CacheProvider implements LocationSearchContract.CacheProvider {
 
     private Map<String, LocationModel> cacheMap;
@@ -19,19 +21,21 @@ public class CacheProvider implements LocationSearchContract.CacheProvider {
     }
 
     @Override
-    public LocationModel getCache(String query) {
+    public Observable<LocationModel> getCache(String query) {
         if (cacheMap.containsKey(query) &&
                 (Calendar.getInstance().getTimeInMillis() - cacheTimeMap.get(query).longValue()) <= 60000) {
-            return cacheMap.get(query);
+            return Observable.just(cacheMap.get(query));
         }
         else {
-            return null;
+            return Observable.empty();
         }
     }
 
     @Override
     public void setCache(String query, LocationModel locationModel) {
-        cacheMap.put(query, locationModel);
-        cacheTimeMap.put(query, Calendar.getInstance().getTimeInMillis());
+        if (locationModel != null) {
+            cacheMap.put(query, locationModel);
+            cacheTimeMap.put(query, Calendar.getInstance().getTimeInMillis());
+        }
     }
 }
