@@ -25,6 +25,7 @@ public class LocationsRepository implements LocationSearchContract.Repository {
         Observable<LocationModel> cache = cacheProvider.getCache(query);
         Observable<LocationModel> networkWithSave = apiProvider.downloadLocations(query)
                 .doOnNext(locationModel -> cacheProvider.setCache(query, locationModel));
+
         return Observable.concat(cache, networkWithSave).first()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread());

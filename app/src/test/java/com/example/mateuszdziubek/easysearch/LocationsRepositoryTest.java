@@ -12,7 +12,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import retrofit2.Response;
 import rx.Observable;
 import rx.observers.TestSubscriber;
 
@@ -45,16 +44,31 @@ public class LocationsRepositoryTest {
 
     @Test
     public void isRepositoryCallResultingInObservableWithResponse() {
-        when(apiProvider.downloadLocations(anyString())).thenReturn(Observable.just(Response.success(locationModel)));
+        when(apiProvider.downloadLocations(anyString())).thenReturn(Observable.just(locationModel));
 
         locationsRepository.getLocations(anyString());
         verify(apiProvider).downloadLocations(anyString());
     }
 
     @Test
-    public void isObservableCarryingCorrectlyOneModel() {
+    public void isNetworkCarryingCorrectlyOneModel() {
         TestSubscriber<LocationModel> testSubscriber = new TestSubscriber<>();
-        when(apiProvider.downloadLocations(anyString())).thenReturn(Observable.just(Response.success(locationModel)));
+        when(cacheProvider.getCache(anyString())).thenReturn(Observable.empty());
+        when(apiProvider.downloadLocations(anyString())).thenReturn(Observable.just(locationModel));
+
+        Observable<LocationModel> observable = locationsRepository.getLocations(anyString());
+        observable.subscribe(testSubscriber);
+
+        testSubscriber.assertNoErrors();
+        testSubscriber.assertValueCount(1);
+
+    }
+
+    @Test
+    public void isCacheCarryingCorrectlyOneModel() {
+        TestSubscriber<LocationModel> testSubscriber = new TestSubscriber<>();
+        when(cacheProvider.getCache(anyString())).thenReturn(Observable.just(locationModel));
+        when(apiProvider.downloadLocations(anyString())).thenReturn(Observable.empty());
 
         Observable<LocationModel> observable = locationsRepository.getLocations(anyString());
         observable.subscribe(testSubscriber);
